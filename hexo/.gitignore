@@ -3,5 +3,6 @@ Thumbs.db
 db.json
 *.log
 node_modules/
+themes/hexo-icer/
 public/
 .deploy*/
