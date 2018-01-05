@@ -1,0 +1,45 @@
+# Meta
+description: 一个程序员的小博客之旅.
+keywords: hexo,php,mountainguan
+
+# Navigation
+navigation:
+- name: home
+  slug: home
+  url: /
+- name: web development
+  slug: web development
+  url: /tags/web-development/
+- name: soft
+  slug: soft
+  url: /tags/soft/
+- name: os
+  slug: os
+  url: /tags/os/
+- name: archives
+  slug: archives
+  url: /archives
+- name: About
+  slug: About
+  url: /about/
+
+# Social account
+social:
+- slug: github
+  url: https://github.com/mountainguan
+- slug: weibo
+  url: https://weibo.com/727302012
+- slug: email
+  url: mailto:mountainguan@gmail.com
+- slug: rss
+	url: /atom.xml
+
+# Google analytics
+google_analytics: UA-81904571-1
+
+# Local search
+local_search:
+  enable: true
+
+# Favicon
+#favicon: /image/favicon.ico
