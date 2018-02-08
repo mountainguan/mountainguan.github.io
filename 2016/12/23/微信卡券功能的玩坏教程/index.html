@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  <title>微信卡券功能的玩坏教程 | 小博客</title>
+  <meta name="description" content="一个程序员的小博客之旅." />
+  <meta name="keywords" content="hexo,php,mountainguan" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="关于微信的卡券功能, 百度上我只能搜到的都是跟官网差不多的东西. 所以就自己对着官方文档跑了一天, 为了满足公司的需求鼓捣得到一些小心得. 情景是我们需要一堆已知 code 的卡券, 但是微信公众号后台可视化界面并不支持这样的模式. 微信自带生成的卡券是有人触发就随机分配一个码, 并不实用, 因为我们并是那种消费的业务逻辑, 而是更像是体验卡的形式. ##1. 用 api 建立的卡券才能使用自定义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信卡券功能的玩坏教程">
+<meta property="og:url" content="https://mountainguan.tech/2016/12/23/微信卡券功能的玩坏教程/index.html">
+<meta property="og:site_name" content="小博客">
+<meta property="og:description" content="关于微信的卡券功能, 百度上我只能搜到的都是跟官网差不多的东西. 所以就自己对着官方文档跑了一天, 为了满足公司的需求鼓捣得到一些小心得. 情景是我们需要一堆已知 code 的卡券, 但是微信公众号后台可视化界面并不支持这样的模式. 微信自带生成的卡券是有人触发就随机分配一个码, 并不实用, 因为我们并是那种消费的业务逻辑, 而是更像是体验卡的形式. ##1. 用 api 建立的卡券才能使用自定义">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/6ace449bjw1fb0t2kr8xrj20f00qomyd.jpg">
+<meta property="og:updated_time" content="2018-02-08T02:28:39.833Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信卡券功能的玩坏教程">
+<meta name="twitter:description" content="关于微信的卡券功能, 百度上我只能搜到的都是跟官网差不多的东西. 所以就自己对着官方文档跑了一天, 为了满足公司的需求鼓捣得到一些小心得. 情景是我们需要一堆已知 code 的卡券, 但是微信公众号后台可视化界面并不支持这样的模式. 微信自带生成的卡券是有人触发就随机分配一个码, 并不实用, 因为我们并是那种消费的业务逻辑, 而是更像是体验卡的形式. ##1. 用 api 建立的卡券才能使用自定义">
+<meta name="twitter:image" content="http://ww4.sinaimg.cn/large/6ace449bjw1fb0t2kr8xrj20f00qomyd.jpg">
+  
+  
+  
+  <link rel='stylesheet' href='//cdnjs.xyz/libs/nprogress/0.2.0/nprogress.css'/>
+  <link rel="stylesheet" href="//cdnjs.xyz/libs/highlight/9.12.0/styles/github-gist.css">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_405585_2mmfrz9pgd7h9f6r.css">
+  <script src='//cdnjs.xyz/libs/nprogress/0.2.0/nprogress.js'></script>
+  <!-- <script>try{Typekit.load({ async: false });}catch(e){}</script> -->
+  <link rel="stylesheet" href="/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+  ga('create', 'UA-81904571-1', 'auto');
+  ga('send', 'pageview');
+  
+</script>
+<!-- End Google Analytics -->
+
+
+</head>
+
+<body>
+  
+  <script>NProgress.start();</script>
+  
+  <div id="site-wrapper">
+    
+    <header class="header">
+  <div class="header-wrapper">
+    <a href="/">
+      <img src="/image/logo.jpg" class="logo"/>
+      <!-- <span class="site-desc">
+        
+      </span> -->
+    </a>
+    <div class="social-wrapper">
+      
+        
+          <a href="https://github.com/mountainguan" class="social github" target="_blank" rel="external">
+            <span class="iconfont icon-github"></span>
+          </a>
+          
+          <a href="https://weibo.com/727302012" class="social weibo" target="_blank" rel="external">
+            <span class="iconfont icon-weibo"></span>
+          </a>
+          
+          <a href="mailto:mountainguan@gmail.com" class="social email" target="_blank" rel="external">
+            <span class="iconfont icon-email"></span>
+          </a>
+          
+          <a href="/atom.xml" class="social rss" target="_blank" rel="external">
+            <span class="iconfont icon-rss"></span>
+          </a>
+          
+      
+      
+      <a href="#" class="social search-do" target="_blank" rel="external">
+        <span class="iconfont icon-search"></span>
+      </a>
+            
+      <!-- <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><input type="hidden" name="sitesearch" value="https://mountainguan.tech"></form> -->
+    </div>
+    <div class="search-wrap">
+      <div class="search-content animated fade-in">
+        <p class="search-input">
+          <span class="iconfont icon-search"></span>
+          <input tabindex="1">
+        </p>
+        <ul class="search-result">
+            
+              <div class="tags">
+                   <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLP/">MLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/极路由/">极路由</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/玩物/">玩物</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li></ul>
+                </div>
+            
+        </ul>
+      </div>
+    </div>
+    <nav class="header-nav">
+      
+        <a href="/" class="archives">
+          home
+        </a>
+        
+        <a href="/tags/web-development/" class="archives">
+          web development
+        </a>
+        
+        <a href="/tags/soft/" class="archives">
+          soft
+        </a>
+        
+        <a href="/tags/os/" class="archives">
+          os
+        </a>
+        
+        <a href="/archives" class="archives">
+          archives
+        </a>
+        
+        <a href="/about/" class="archives">
+          About
+        </a>
+        
+    </nav>
+  </div>
+</header>
+    <script>NProgress.set(0.4);</script>
+    
+    <main id="main" role="main">
+      <article id="post-微信卡券功能的玩坏教程"
+  class="post article white-box article-type-post animated fade-in-top"
+  itemscope itemprop="blogPost">
+  <section class="post-header article-header">
+    <h2 class="title">
+        <a href="/2016/12/23/微信卡券功能的玩坏教程/">
+          微信卡券功能的玩坏教程
+        </a>
+      </h2>
+      <div class="subtitle">
+          <time>
+            Dec 23, 2016
+          </time>
+          
+      </div>
+  </section>
+  <section class="content">
+    <div class="article-entry" itemprop="articleBody">
+      <p>关于微信的卡券功能, 百度上我只能搜到的都是跟官网差不多的东西. 所以就自己对着官方文档跑了一天, 为了满足公司的需求鼓捣得到一些小心得. 情景是我们需要一堆已知 code 的卡券, 但是微信公众号后台可视化界面并不支持这样的模式. 微信自带生成的卡券是有人触发就随机分配一个码, 并不实用, 因为我们并是那种消费的业务逻辑, 而是更像是体验卡的形式.</p>
+<p>##1. 用 api 建立的卡券才能使用自定义 code 功能, 也就是譬如我想卡券用英文句子来作为卡券的码. 这种时候我们就需要调用微信公众号的 api 了, 可以使用 <a href="http://mp.weixin.qq.com/debug/" target="_blank" rel="noopener">http://mp.weixin.qq.com/debug/</a> 里的测试接口生成. 也可以自己跑微信接口.</p>
+<p>敲黑板! 敲黑板! 敲黑板!</p>
+<p>麻烦的地方是不这个接口怎么触发, 而是这个卡券的 json 信息. 一大串, 关键的功能挺多的, 我都看了一天文档才搞清楚了一些.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;card_type&quot;:&quot;GENERAL_COUPON&quot;,//这里有5个选择,具体是根据类型决定的</span><br><span class="line">    &quot;general_coupon&quot;:&#123;</span><br><span class="line">        &quot;base_info&quot;:&#123;/*[必填,详情看这里][1]*/&#125;,</span><br><span class="line">        &quot;default_detail&quot;:&apos;一些描述&apos;,</span><br><span class="line">        &quot;advanced_info&quot;:&#123;/*选填*/&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只要 json 正确就能 post 过去就能看见创建了一个卡券了.</p>
+<p>##2. 本文主要是介绍自定义 code 群发这个功能, 所以必须声明的两个属性. 下面为官方原文提示</p>
+<p>如果开发者打算新创建一张支持导入 code 模式的卡券，不同于以往的创建方式，建议开发者采用以下流程创建预存 code 模式卡券，否则会报错。</p>
+<ul>
+<li>步骤一：创建预存模式卡券，将库存 quantity 初始值设置为 0，并填入 get_custom_code_mode 字段；</li>
+<li>步骤二：待卡券通过审核后，调用导入 code 接口并核查 code；</li>
+<li>步骤三：调用修改库存接口，须令卡券库存小于或等于导入 code 的数目。（为了避免混乱建议设置为相等）</li>
+</ul>
+<p>##3. 导入 code, 前期工作做好了, 就可以进入最关键的阶段, 一就是生成你自己需要的 code, 这个跟微信 api 无关, 你想生成什么就生成. 之后才是真的关键的地方, 卡券 code 的导入一次调用只能 100 个, 然后卡券的库存可以修改.</p>
+<p>我是一次过插入 10000 个的, 毕竟一个卡券的最高上限是 1 亿个 code. 通过 for 循环 100 个 100 个那样插入, 并且 100 个 100 个库存那样增加. 可以在后台可视化地看见 code 的数目的增长.<br><img src="http://ww4.sinaimg.cn/large/6ace449bjw1fb0t2kr8xrj20f00qomyd.jpg" alt="pic"></p>
+<p>总结:: 这样创建出来的卡券不能生成二维码入口, 但是可以插入到推送中, 也可以插入到服务号的菜单中.</p>
+<p>附件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br></pre></td><td class="code"><pre><span class="line">if (isset($_GET[&apos;act&apos;])) &#123;</span><br><span class="line">    $act = $_GET[&apos;act&apos;];</span><br><span class="line">&#125;</span><br><span class="line">if(isset($_GET[&apos;tool&apos;]))&#123;</span><br><span class="line">    $tool = $_GET[&apos;tool&apos;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if ($act == &apos;card_create&apos;) &#123;</span><br><span class="line">    ;</span><br><span class="line">&#125;elseif($act == &apos;check_code&apos;)&#123;</span><br><span class="line">    $code_arr = get_code();</span><br><span class="line">    foreach ($code_arr as $key =&gt; $hundred_code) &#123;</span><br><span class="line">        card_manager(&apos;codeCheck&apos;,0,$hundred_code);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;elseif($act == &apos;import_code&apos;) &#123;</span><br><span class="line">    $code_arr = get_code();</span><br><span class="line">    foreach ($code_arr as $key =&gt; $hundred_code) &#123;</span><br><span class="line">        card_manager(&apos;codeDeposit&apos;,0,$hundred_code);</span><br><span class="line">        card_manager(&apos;stockModify&apos;,100);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;elseif($act == &apos;card_detail&apos;)&#123;</span><br><span class="line">    card_manager(&apos;cardGet&apos;);</span><br><span class="line">&#125;elseif($tool == &apos;shorten&apos;)&#123;</span><br><span class="line">    card_manager(&apos;long2short&apos;);</span><br><span class="line">&#125;elseif($tool == &apos;gcode&apos;)&#123;</span><br><span class="line">    generate_code();</span><br><span class="line">&#125;elseif($tool == &apos;compare&apos;)&#123;</span><br><span class="line">    compare_code_diff(&quot;cpyhq1.txt&quot;,&quot;cpyhq2.txt&quot;);</span><br><span class="line">&#125;else&#123;</span><br><span class="line">    echo &quot;有毛病&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function get_card_id()</span><br><span class="line">&#123;</span><br><span class="line">    $card_id = &quot;卡券id&quot;;</span><br><span class="line">    return $card_id;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function card_manager($event,$stockNum=0,$code_arr=[],$stock_status=&apos;increase&apos;)</span><br><span class="line">&#123;</span><br><span class="line">    $access_token = &apos;access_token还没写获取方法&apos;;</span><br><span class="line"></span><br><span class="line">    $longlink = &quot;&quot;;//长链接</span><br><span class="line"></span><br><span class="line">    switch ($event) &#123;</span><br><span class="line">        case &apos;codeDeposit&apos;:</span><br><span class="line">            //code储存</span><br><span class="line">            $url = &quot;http://api.weixin.qq.com/card/code/deposit?access_token=&quot;.$access_token;</span><br><span class="line">            $json = json_encode(array(&quot;card_id&quot;=&gt;get_card_id(),&quot;code&quot;=&gt;$code_arr));</span><br><span class="line">            break;</span><br><span class="line">        case &apos;codeCheck&apos;:</span><br><span class="line">            //code状态检查</span><br><span class="line">            $url = &quot;http://api.weixin.qq.com/card/code/checkcode?access_token=&quot;.$access_token;</span><br><span class="line">            $json = json_encode(array(&quot;card_id&quot;=&gt;get_card_id(),&quot;code&quot;=&gt;$code_arr));</span><br><span class="line">            break;</span><br><span class="line">        case &apos;stockModify&apos;:</span><br><span class="line">            //库存数量修改</span><br><span class="line">            $url = &quot;https://api.weixin.qq.com/card/modifystock?access_token=&quot;.$access_token;</span><br><span class="line">            if ($stock_status==&apos;increase&apos;) &#123;</span><br><span class="line">                $str = &quot;increase_stock_value&quot;;</span><br><span class="line">            &#125;elseif($stock_status==&apos;reduce&apos;)&#123;</span><br><span class="line">                $str = &quot;reduce_stock_value&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            $json = &apos;&#123;</span><br><span class="line">                        &quot;card_id&quot;: &quot;&apos;.get_card_id().&apos;&quot;,</span><br><span class="line">                        &quot;&apos;.$str.&apos;&quot;: &apos;.$stockNum.&apos;</span><br><span class="line">                    &#125;&apos;;</span><br><span class="line">            break;</span><br><span class="line">        case &apos;cardGet&apos;:</span><br><span class="line">            //优惠卡详细信息</span><br><span class="line">            $url = &quot;https://api.weixin.qq.com/card/get?access_token=&quot;.$access_token;</span><br><span class="line">            $json = json_encode(array(&quot;card_id&quot;=&gt;get_card_id()));</span><br><span class="line">            break;</span><br><span class="line">        case &apos;long2short&apos;:</span><br><span class="line">            //微信短链</span><br><span class="line">            $url = &quot;https://api.weixin.qq.com/cgi-bin/shorturl?access_token=&quot;.$access_token;</span><br><span class="line">            $json = json_encode(array(&quot;action&quot;=&gt;&quot;long2short&quot;,&quot;long_url&quot;=&gt;$longlink));</span><br><span class="line">            break;</span><br><span class="line">        case &apos;cardUpdateName&apos;:</span><br><span class="line">            //优惠卡基本修改修改</span><br><span class="line">            $url = &quot;https://api.weixin.qq.com/card/update?access_token=&quot;.$access_token;</span><br><span class="line">            $json = &apos;&#123;</span><br><span class="line">                       &quot;card_id&quot;:&quot;&apos;.get_card_id().&apos;&quot;,</span><br><span class="line">                       &quot;general_coupon&quot;: &#123; </span><br><span class="line">                               &quot;base_info&quot;: &#123;</span><br><span class="line">                                       &quot;title&quot;:&quot;测评优惠券1&quot;</span><br><span class="line">                               &#125;</span><br><span class="line">                       &#125;</span><br><span class="line">                &#125;&apos;;</span><br><span class="line">            break;</span><br><span class="line">        case &apos;cardDelete&apos;:</span><br><span class="line">            //优惠卡删除</span><br><span class="line">            $url = &quot;https://api.weixin.qq.com/card/delete?access_token=&quot;.$access_token;</span><br><span class="line">            $json = json_encode(array(&quot;card_id&quot;=&gt;get_card_id()));</span><br><span class="line">        default:</span><br><span class="line">            # code...</span><br><span class="line">            break;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $result = https_request($url, $json);</span><br><span class="line">    echo $result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function generate_code()&#123;</span><br><span class="line">    /*每两个数字之间重复的概率为90万*90万分之一</span><br><span class="line">        基本不会重复</span><br><span class="line">     */</span><br><span class="line">    $arr = array();</span><br><span class="line">    for ($i=0; $i &lt; 10000; $i++) &#123; </span><br><span class="line">        $a = rand(100000,999999);</span><br><span class="line">        $b = rand(100000,999999);</span><br><span class="line">        $arr[$i] = $a*$b;</span><br><span class="line">        if (strlen($arr[$i])&lt;12) &#123;</span><br><span class="line">            $fix = rand(0,9);</span><br><span class="line">            $arr[$i] = (string)$arr[$i].(string)$fix;</span><br><span class="line">            $arr[$i] = intval($arr[$i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (count($arr) != count(array_unique($arr))) &#123;   </span><br><span class="line">        generate_code();  </span><br><span class="line">    &#125; </span><br><span class="line">    $fp = fopen(&apos;output.txt&apos;,&apos;w+&apos;);</span><br><span class="line">    foreach ($arr as $key =&gt; $value) &#123;</span><br><span class="line">        fwrite($fp,$value.&quot;\n&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    fclose($fp);</span><br><span class="line">    //return $arr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function get_code()&#123;</span><br><span class="line">    $file = &apos;coupon.txt&apos;;</span><br><span class="line">    $content = file_get_contents($file); //读取文件中的内容</span><br><span class="line">    $str = str_replace(array(&quot;\r\n&quot;, &quot;\r&quot;, &quot;\n&quot;), &quot; &quot;, $content); </span><br><span class="line">    $arr = explode(&apos; &apos;, $str);</span><br><span class="line">    unset($arr[count($arr)-1]);</span><br><span class="line">    //把过长的code段成几截</span><br><span class="line">    $num = count($arr);</span><br><span class="line">    $return_arr = [];</span><br><span class="line">    $counter = $num%100 == 0? ($num/100)-1:floor($num/100);//分组计数器</span><br><span class="line">    for ($i=0; $i &lt;= $counter; $i++) &#123; </span><br><span class="line">        $return_arr[$i] = array_slice($arr,$i*100,100);</span><br><span class="line">    &#125;</span><br><span class="line">    return $return_arr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function compare_code_diff($f1,$f2)&#123;</span><br><span class="line">    $file1 = $f1;</span><br><span class="line">    $file2 = $f2;</span><br><span class="line">    $content = file_get_contents($file1); //读取文件中的内容</span><br><span class="line">    $str1 = str_replace(array(&quot;\r\n&quot;, &quot;\r&quot;, &quot;\n&quot;), &quot; &quot;, $content); </span><br><span class="line">    $arr1 = explode(&apos; &apos;, $str1);</span><br><span class="line"></span><br><span class="line">    $content = file_get_contents($file2); //读取文件中的内容</span><br><span class="line">    $str2 = str_replace(array(&quot;\r\n&quot;, &quot;\r&quot;, &quot;\n&quot;), &quot; &quot;, $content); </span><br><span class="line">    $arr2 = explode(&apos; &apos;, $str2);</span><br><span class="line"></span><br><span class="line">    print_r(array_flip(array_merge($arr1,$arr2)));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function https_request($url, $data = null)</span><br><span class="line">&#123;</span><br><span class="line">    $curl = curl_init();</span><br><span class="line">    curl_setopt($curl, CURLOPT_URL, $url);</span><br><span class="line">    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);</span><br><span class="line">    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);</span><br><span class="line">    if (!empty($data))&#123;</span><br><span class="line">        curl_setopt($curl, CURLOPT_POST, 1);</span><br><span class="line">        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);</span><br><span class="line">    &#125;</span><br><span class="line">    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);</span><br><span class="line">    $output = curl_exec($curl);</span><br><span class="line">    curl_close($curl);</span><br><span class="line">    return $output;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+    </div>
+  </section>
+
+  
+  
+</article>
+      <script>NProgress.set(0.6);</script>
+    </main>
+    
+    <footer class="footer">
+  <div class="footer-wrap">
+    <div class="footer-link">
+      
+    </div>
+    <div class="footer-tags">
+      
+        <h3>TAGS</h3>        
+        <div class="tags">
+             <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MLP/">MLP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/极路由/">极路由</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度学习/">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/玩物/">玩物</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li></ul>
+          </div>
+      
+    </div>
+    <div class="footer-info">
+        <div>Theme <span class="codename"><a href="https://github.com/GGICE/hexo-icer" target="_blank">icer</a></span> designed & coded by <a href="https://ice.gs/" target="_blank">GGICE</a></div>
+        <div>Copyright &copy; 2018, <a href="/">小博客</a>  . All rights reserved .</div>
+      </div>
+  </div>
+</footer>
+
+
+    <script>NProgress.set(0.8);</script>
+    
+  </div>
+
+  <script src="//cdnjs.xyz/libs/highlight/9.12.0/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/main.js"></script>
+
+<!-- Commit -->
+
+
+
+  <script>
+    NProgress.done();
+  </script>
+  
+</body>
+</html>
