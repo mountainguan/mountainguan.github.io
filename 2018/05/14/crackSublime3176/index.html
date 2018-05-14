@@ -10,18 +10,18 @@
   <meta name="HandheldFriendly" content="True" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）  printf &amp;#39;\x00\01&amp;#39; | sudo dd seek=$((0xD538)) conv=notrunc bs=1 of=/opt/sublime_text/sublime_text">
+  <meta name="description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程  先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走    然后在控制台执行下面的命令    printf &amp;#39;\x00\01&amp;#39; | sudo dd seek=$((0xD538">
 <meta name="keywords" content="crack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="破解linux版sublime text 3176">
 <meta property="og:url" content="https://mountainguan.tech/2018/05/14/crackSublime3176/index.html">
 <meta property="og:site_name" content="小博客">
-<meta property="og:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）  printf &amp;#39;\x00\01&amp;#39; | sudo dd seek=$((0xD538)) conv=notrunc bs=1 of=/opt/sublime_text/sublime_text">
+<meta property="og:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程  先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走    然后在控制台执行下面的命令    printf &amp;#39;\x00\01&amp;#39; | sudo dd seek=$((0xD538">
 <meta property="og:image" content="http://ww1.sinaimg.cn/mw690/6ace449bgy1fraprms8yij208x054t8r.jpg">
-<meta property="og:updated_time" content="2018-05-14T03:37:00.864Z">
+<meta property="og:updated_time" content="2018-05-14T03:58:44.740Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="破解linux版sublime text 3176">
-<meta name="twitter:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）  printf &amp;#39;\x00\01&amp;#39; | sudo dd seek=$((0xD538)) conv=notrunc bs=1 of=/opt/sublime_text/sublime_text">
+<meta name="twitter:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程  先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走    然后在控制台执行下面的命令    printf &amp;#39;\x00\01&amp;#39; | sudo dd seek=$((0xD538">
 <meta name="twitter:image" content="http://ww1.sinaimg.cn/mw690/6ace449bgy1fraprms8yij208x054t8r.jpg">
   
   
@@ -147,8 +147,19 @@
       <ul>
 <li>我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）</li>
 </ul>
+<hr>
+<h3 id="操作过程"><a href="#操作过程" class="headerlink" title="操作过程"></a>操作过程</h3><ul>
+<li><ol>
+<li>先在hosts中添加<code>0.0.0.0 license.sublimehq.com</code>, 这是防止证书被移走</li>
+</ol>
+</li>
+<li><ol>
+<li>然后在控制台执行下面的命令</li>
+</ol>
+</li>
+</ul>
 <p><code>printf &#39;\x00\01&#39; | sudo dd seek=$((0xD538)) conv=notrunc bs=1 of=/opt/sublime_text/sublime_text</code> </p>
-<p><img src="http://ww1.sinaimg.cn/mw690/6ace449bgy1fraprms8yij208x054t8r.jpg" alt="效果图"></p>
+<h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="http://ww1.sinaimg.cn/mw690/6ace449bgy1fraprms8yij208x054t8r.jpg" alt="效果图"></p>
 
     </div>
   </section>
