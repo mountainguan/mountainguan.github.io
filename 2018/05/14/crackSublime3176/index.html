@@ -10,18 +10,18 @@
   <meta name="HandheldFriendly" content="True" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程 先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走  然后新建脚本，保存为crack_sublime.sh   1234567891011121314151617181920212223#!/">
+  <meta name="description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程 先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走  然后新建脚本，保存为crack_sublime.sh   #!/bin/bash  SUBLIME_EXECUTABLE=&amp;quot;$1">
 <meta name="keywords" content="crack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="破解linux版sublime text 3176">
 <meta property="og:url" content="https://mountainguan.tech/2018/05/14/crackSublime3176/index.html">
 <meta property="og:site_name" content="小博客">
-<meta property="og:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程 先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走  然后新建脚本，保存为crack_sublime.sh   1234567891011121314151617181920212223#!/">
+<meta property="og:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程 先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走  然后新建脚本，保存为crack_sublime.sh   #!/bin/bash  SUBLIME_EXECUTABLE=&amp;quot;$1">
 <meta property="og:image" content="http://ww1.sinaimg.cn/mw690/6ace449bgy1fraprms8yij208x054t8r.jpg">
-<meta property="og:updated_time" content="2018-05-16T07:02:27.659Z">
+<meta property="og:updated_time" content="2018-05-16T07:04:53.809Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="破解linux版sublime text 3176">
-<meta name="twitter:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程 先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走  然后新建脚本，保存为crack_sublime.sh   1234567891011121314151617181920212223#!/">
+<meta name="twitter:description" content="我是基于apt安装的sublime text 3176，在命令行中输入下面的命令即可（原则上debian系的所有发行版均可，其他请自行测试）   操作过程 先在hosts中添加0.0.0.0 license.sublimehq.com, 这是防止证书被移走  然后新建脚本，保存为crack_sublime.sh   #!/bin/bash  SUBLIME_EXECUTABLE=&amp;quot;$1">
 <meta name="twitter:image" content="http://ww1.sinaimg.cn/mw690/6ace449bgy1fraprms8yij208x054t8r.jpg">
   
   
@@ -154,7 +154,27 @@
 <li><p>然后新建脚本，保存为crack_sublime.sh</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">SUBLIME_EXECUTABLE=&quot;$1&quot;</span><br><span class="line">CRACK=&quot;$2&quot;</span><br><span class="line"></span><br><span class="line">OFFSET_1=$((&quot;$(binwalk -R &apos;\x41\x56\x53\x48\x83\xEC\x70\x49\x89\xFE\x48\x8D\x7C\x24\x48&apos; $SUBLIME_EXECUTABLE | tail -n2 | awk &apos;&#123; print $2 &#125;&apos;)&quot; - 1))</span><br><span class="line">OFFSET_2=$((&quot;$(binwalk -R &apos;\x48\x89\xFB\x80\x3B\x00\x74\x22\x48\x8D\x7B&apos; $SUBLIME_EXECUTABLE | tail -n2 | awk &apos;&#123; print $2 &#125;&apos;)&quot; - 1))</span><br><span class="line">OFFSET_3=$((&quot;$(binwalk -R &apos;\x22\x00\x55\x41\x57\x41\x56\x41\x55\x41\x54&apos; $SUBLIME_EXECUTABLE | tail -n2 | awk &apos;&#123; print $2 &#125;&apos;)&quot; + 2))</span><br><span class="line"></span><br><span class="line">printf &quot;OFFSET_1=0x%04x\n&quot; &quot;$OFFSET_1&quot;</span><br><span class="line">printf &quot;OFFSET_2=0x%04x\n&quot; &quot;$OFFSET_2&quot;</span><br><span class="line">printf &quot;OFFSET_3=0x%04x\n&quot; &quot;$OFFSET_3&quot;</span><br><span class="line"></span><br><span class="line">if [[ $CRACK == &apos;true&apos; ]]; then</span><br><span class="line">    printf &apos;\xC3&apos; | dd seek=$((&quot;$OFFSET_1&quot;)) conv=notrunc bs=1 of=&quot;$SUBLIME_EXECUTABLE&quot;</span><br><span class="line">    printf &apos;\xC3&apos; | dd seek=$((&quot;$OFFSET_2&quot;)) conv=notrunc bs=1 of=&quot;$SUBLIME_EXECUTABLE&quot;</span><br><span class="line">    printf &quot;\x48\xc7\xc0\x01\x00\x00\x00\xc3&quot; | dd seek=$((&quot;$OFFSET_3&quot;)) conv=notrunc bs=1 of=&quot;$SUBLIME_EXECUTABLE&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line"> - 到脚本目录运行</span><br><span class="line">``` sudo bash ./crack_sublime.sh /opt/sublime_text/sublime_text true</span><br></pre></td></tr></table></figure>
+<pre><code>#!/bin/bash
+
+SUBLIME_EXECUTABLE=&quot;$1&quot;
+CRACK=&quot;$2&quot;
+
+OFFSET_1=$((&quot;$(binwalk -R &apos;\x41\x56\x53\x48\x83\xEC\x70\x49\x89\xFE\x48\x8D\x7C\x24\x48&apos; $SUBLIME_EXECUTABLE | tail -n2 | awk &apos;{ print $2 }&apos;)&quot; - 1))
+OFFSET_2=$((&quot;$(binwalk -R &apos;\x48\x89\xFB\x80\x3B\x00\x74\x22\x48\x8D\x7B&apos; $SUBLIME_EXECUTABLE | tail -n2 | awk &apos;{ print $2 }&apos;)&quot; - 1))
+OFFSET_3=$((&quot;$(binwalk -R &apos;\x22\x00\x55\x41\x57\x41\x56\x41\x55\x41\x54&apos; $SUBLIME_EXECUTABLE | tail -n2 | awk &apos;{ print $2 }&apos;)&quot; + 2))
+
+printf &quot;OFFSET_1=0x%04x\n&quot; &quot;$OFFSET_1&quot;
+printf &quot;OFFSET_2=0x%04x\n&quot; &quot;$OFFSET_2&quot;
+printf &quot;OFFSET_3=0x%04x\n&quot; &quot;$OFFSET_3&quot;
+
+if [[ $CRACK == &apos;true&apos; ]]; then
+    printf &apos;\xC3&apos; | dd seek=$((&quot;$OFFSET_1&quot;)) conv=notrunc bs=1 of=&quot;$SUBLIME_EXECUTABLE&quot;
+    printf &apos;\xC3&apos; | dd seek=$((&quot;$OFFSET_2&quot;)) conv=notrunc bs=1 of=&quot;$SUBLIME_EXECUTABLE&quot;
+    printf &quot;\x48\xc7\xc0\x01\x00\x00\x00\xc3&quot; | dd seek=$((&quot;$OFFSET_3&quot;)) conv=notrunc bs=1 of=&quot;$SUBLIME_EXECUTABLE&quot;
+fi
+</code></pre><ul>
+<li>到脚本目录运行<code>sudo bash ./crack_sublime.sh /opt/sublime_text/sublime_text true</code></li>
+</ul>
 <h3 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h3><p><img src="http://ww1.sinaimg.cn/mw690/6ace449bgy1fraprms8yij208x054t8r.jpg" alt="效果图"></p>
 
     </div>
