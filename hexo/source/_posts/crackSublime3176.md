@@ -9,11 +9,12 @@ tags: crack
 ***
 ### 操作过程
 
- 1. 先在hosts中添加``0.0.0.0 license.sublimehq.com``, 这是防止证书被移走
+- 先在hosts中添加``0.0.0.0 license.sublimehq.com``, 这是防止证书被移走
 
- 2. 然后新建脚本，保存为crack_sublime.sh
+- 然后新建脚本，保存为crack_sublime.sh
 
-`` #!/bin/bash
+`` 
+#!/bin/bash
 
 SUBLIME_EXECUTABLE="$1"
 CRACK="$2"
@@ -31,9 +32,10 @@ if [[ $CRACK == 'true' ]]; then
     printf '\xC3' | dd seek=$(("$OFFSET_2")) conv=notrunc bs=1 of="$SUBLIME_EXECUTABLE"
     printf "\x48\xc7\xc0\x01\x00\x00\x00\xc3" | dd seek=$(("$OFFSET_3")) conv=notrunc bs=1 of="$SUBLIME_EXECUTABLE"
 fi
+
 `` 
 
- 3.到脚本目录运行
+ - 到脚本目录运行
 `` sudo bash ./crack_sublime.sh /opt/sublime_text/sublime_text true ``
 
 ### 效果图
